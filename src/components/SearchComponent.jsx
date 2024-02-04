@@ -18,14 +18,34 @@ const SearchComponent = () => {
     }
   };
 
+  const handleDownloadResults = () => {
+    const formattedResults = JSON.stringify(results, null, 2);
+    const blob = new Blob([formattedResults], { type: "text/plain" }); 
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "search_results.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
+      <div>
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+
+      <div>
+        <button onClick={handleDownloadResults}>Download Results</button>
+      </div>
 
       <ul className="search-results">
         {results.map((result) => (
